@@ -5,7 +5,7 @@ const ExpressError = require('./expressError')
 const f = require('./functions')
 
 
-
+// MEAN
 app.get('/mean/:num',(req,res,next)=>{
     // CHECK IF STRING CONTAINS A NUMBER .. I THINK THIS CODE IS WRONG
     if( req.params.num!=Number){
@@ -30,12 +30,42 @@ app.get('/mean/:num',(req,res,next)=>{
     // res.send(req.headers)
 });
 
+// MEDIAN
 app.get('/median/:num',(req,res,next)=>{
-    res.send('this is a median page!')
+    if( req.params.num!=Number){
+        throw new ExpressError(`{req.params.num} is not a number`,400)
+    }
+    else if(!req.params.num){
+        throw new ExpressError(`numbers are required!`,400)
+    }
+    let num = req.params.num.split(',');
+    num = Array.from(String(num));
+
+    let result = {
+        operation: "median",
+        value: f.median(num)
+    }
+
+    res.send(`your numbers are : {num}. median is `+result);
 });
 
+// MODE
 app.get('/mode/:num',(req,res,next)=>{
-    console.log('mode')
+    if( req.params.num!=Number){
+        throw new ExpressError(`{req.params.num} is not a number`,400)
+    }
+    else if(!req.params.num){
+        throw new ExpressError(`numbers are required!`,400)
+    }
+    let num = req.params.num.split(',');
+    num = Array.from(String(num));
+
+    let result = {
+        operation: "mode",
+        value: f.mode(num)
+    }
+
+    res.send(`your numbers are : {num}. mode is `+result);
 });
 
 // error handling 
