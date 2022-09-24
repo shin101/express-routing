@@ -6,67 +6,66 @@ const f = require('./functions')
 
 
 // MEAN
-app.get('/mean/:num',(req,res,next)=>{
-    // CHECK IF STRING CONTAINS A NUMBER .. I THINK THIS CODE IS WRONG
-    if( req.params.num!=Number){
-        throw new ExpressError(`{req.params.num} is not a number`,400)
+app.get('/mean/:nums',(req,res,next)=>{
+    console.log(req.params.nums);
+    let nums = req.params.nums.split(',').map(Number);
+
+
+    if(nums.find(isNaN) !== undefined){
+        throw new ExpressError(`${req.params.nums} must contain only numbers`, 400)
     }
-    else if(!req.params.num){
-        throw new ExpressError(`numbers are required!`,400)
-    }
-    let num = req.params.num.split(',');
-    num = Array.from(String(num));
 
     let result = {
         operation: "mean",
-        value: f.mean(num)
+        value: f.mean(nums)
     }
 
-    // WHY IS MY CODE NOT HITTING THIS PART???
-    res.send(`your numbers are : {num}. average is `+result);
+    console.log(result);
 
+    res.send(`your numbers are: ${nums}. average is ${result.value}`);
 
-
-    // res.send(req.headers)
 });
 
 // MEDIAN
-app.get('/median/:num',(req,res,next)=>{
-    if( req.params.num!=Number){
-        throw new ExpressError(`{req.params.num} is not a number`,400)
+app.get('/median/:nums',(req,res,next)=>{
+    let nums = req.params.nums.split(',').map(Number);
+
+    if(nums.find(isNaN) !== undefined){
+        throw new ExpressError(`${req.params.num} is not a number`,400)
     }
-    else if(!req.params.num){
+    else if(!req.params.nums){
         throw new ExpressError(`numbers are required!`,400)
     }
-    let num = req.params.num.split(',');
-    num = Array.from(String(num));
 
     let result = {
         operation: "median",
-        value: f.median(num)
+        value: f.median(nums)
     }
 
-    res.send(`your numbers are : {num}. median is `+result);
+    res.send(`your numbers are : ${nums}. median is ${result.value}`);
 });
 
+
+
 // MODE
-app.get('/mode/:num',(req,res,next)=>{
-    if( req.params.num!=Number){
-        throw new ExpressError(`{req.params.num} is not a number`,400)
+app.get('/mode/:nums',(req,res,next)=>{
+    let nums = req.params.nums.split(',').map(Number);
+
+    if(nums.find(isNaN) !== undefined){
+        throw new ExpressError(`${req.params.nums} must contain only numbers`, 400)
     }
-    else if(!req.params.num){
+    else if(!req.params.nums){
         throw new ExpressError(`numbers are required!`,400)
     }
-    let num = req.params.num.split(',');
-    num = Array.from(String(num));
 
     let result = {
         operation: "mode",
-        value: f.mode(num)
+        value: f.mode(nums)
     }
 
-    res.send(`your numbers are : {num}. mode is `+result);
+    res.send(`your numbers are : ${nums}. mode is ${result.value}`);
 });
+
 
 // error handling 
 app.use((req,res,next)=>{
